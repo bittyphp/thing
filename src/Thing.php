@@ -133,7 +133,7 @@ class Thing implements \IteratorAggregate, \ArrayAccess, \Serializable
     {
         if (is_callable($function)) {
             // NOTE: bindTo is not support at PHP 5.3
-            if (PHP_VERSION_ID >= 50300 && $function instanceof \Closure) {
+            if ($function instanceof \Closure && method_exists($function, 'bindTo')) {
                 $function = $function->bindTo($this);
             }
             $this->_loader = $function;
@@ -164,7 +164,7 @@ class Thing implements \IteratorAggregate, \ArrayAccess, \Serializable
     {
         if (is_callable($function)) {
             // NOTE: bindTo is not support at PHP 5.3
-            if (PHP_VERSION_ID >= 50300 && $function instanceof \Closure) {
+            if ($function instanceof \Closure && method_exists($function, 'bindTo')) {
                 $function = $function->bindTo($this);
             }
             $this->_filter = $function;
@@ -199,7 +199,7 @@ class Thing implements \IteratorAggregate, \ArrayAccess, \Serializable
         }
 
         // // NOTE: bindTo is not support at PHP 5.3
-        if (PHP_VERSION_ID >= 50300 && $function instanceof \Closure) {
+        if ($function instanceof \Closure && method_exists($function, 'bindTo')) {
             $function = $function->bindTo($this);
         }
 
