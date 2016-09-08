@@ -132,7 +132,8 @@ class Thing implements \IteratorAggregate, \ArrayAccess, \Serializable
     public function setLoader($function)
     {
         if (is_callable($function)) {
-            if ($function instanceof \Closure) {
+            // NOTE: bindTo is not support at PHP 5.3
+            if (PHP_VERSION_ID >= 50300 && $function instanceof \Closure) {
                 $function = $function->bindTo($this);
             }
             $this->_loader = $function;
@@ -162,7 +163,8 @@ class Thing implements \IteratorAggregate, \ArrayAccess, \Serializable
     public function setFilter($function)
     {
         if (is_callable($function)) {
-            if ($function instanceof \Closure) {
+            // NOTE: bindTo is not support at PHP 5.3
+            if (PHP_VERSION_ID >= 50300 && $function instanceof \Closure) {
                 $function = $function->bindTo($this);
             }
             $this->_filter = $function;
@@ -196,7 +198,8 @@ class Thing implements \IteratorAggregate, \ArrayAccess, \Serializable
             throw new \InvalidArgumentException('Filter name must be scalar value.');
         }
 
-        if ($function instanceof \Closure) {
+        // // NOTE: bindTo is not support at PHP 5.3
+        if (PHP_VERSION_ID >= 50300 && $function instanceof \Closure) {
             $function = $function->bindTo($this);
         }
 
