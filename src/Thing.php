@@ -101,7 +101,9 @@ class Thing implements \IteratorAggregate, \ArrayAccess, \Serializable
                 if (array_key_exists($key, $this->_data)) {
                     $value = $this->_data[$key];
                     if (is_callable($filter)) {
-                        $this->_data[$key] = $filter($value, $key);
+                        $args = array($value, $key);
+                        $res = call_user_func_array($filter, $args);
+                        $this->_data[$key] = $res;
                     }
                 }
             }
@@ -118,7 +120,7 @@ class Thing implements \IteratorAggregate, \ArrayAccess, \Serializable
     {
         $res = null;
         if (is_callable($function)) {
-            $res = $function($args);
+            $res = call_user_func_array($function, array($args));
         }
         return $res;
     }

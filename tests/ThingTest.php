@@ -44,4 +44,14 @@ class ThingTest extends \PHPUnit_Framework_TestCase
         $thing = new Thing($sample);
         $this->assertFalse($thing['c']);
     }
+
+    public function testAddFilter()
+    {
+        $sample = new SampleModel($this->sample);
+        $thing = new Thing($sample);
+        $thing->addFilter('a', function() {
+            return '_a';
+        });
+        $this->assertEquals($thing['a'], '_a');
+    }
 }
