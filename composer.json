@@ -1,0 +1,33 @@
+{
+  "name": "bittyphp/thing",
+  "description": "Make something data object simply.",
+  "type": "library",
+  "keywords": ["array", "object"],
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Kijtra",
+      "email": "kijtra@gmail.com",
+      "homepage": "http://kijtra.com"
+    }
+  ],
+  "require" : {
+    "php": ">=5.3"
+  },
+  "require-dev" : {
+    "phpunit/phpunit" : "^4.8",
+    "squizlabs/php_codesniffer": "^2.3",
+    "jakub-onderka/php-parallel-lint": "^0.9.0",
+    "satooshi/php-coveralls": "^1.0"
+  },
+  "autoload": {
+    "psr-4": {
+      "BittyPHP\\Thing\\": "src/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "BittyPHP\\Thing\\Test\\": "tests/"
+    }
+  }
+}
