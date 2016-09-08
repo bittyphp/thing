@@ -1,8 +1,7 @@
 <?php
 namespace BittyPHP\Thing\Test;
 
-use \BittyPHP\Thing\Thing;
-
+use BittyPHP\Thing\Thing;
 
 class ThingTest extends \PHPUnit_Framework_TestCase
 {
@@ -18,11 +17,11 @@ class ThingTest extends \PHPUnit_Framework_TestCase
     {
         $sample = $this->sample;
 
-        $loader = function() use($sample) {
+        $loader = function () use ($sample) {
             return $sample;
         };
 
-        $filter = function($data) {
+        $filter = function ($data) {
             $data['c'] = false;
             return $data;
         };
@@ -39,7 +38,7 @@ class ThingTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse($thing['c']);
     }
 
-    public function testConstructSingle()
+    public function testConstructSingleClass()
     {
         $sample = new SampleModel($this->sample);
         $thing = new Thing($sample);
