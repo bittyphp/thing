@@ -3,7 +3,6 @@
  * BittyPHP/Thing
  *
  * Licensed under The MIT License
- *
  * @license http://www.opensource.org/licenses/mit-license.php MIT License
  */
 namespace BittyPHP\Thing;
@@ -48,33 +47,27 @@ class Thing implements \IteratorAggregate, \ArrayAccess, \Serializable
     /**
      * Initialize
      *
-     * @param  mixed  $loader  The data loading script
-     * @param  callable  $filter  The data filtering script
+     * @param mixed $loader The data loading script
+     * @param mixed $filter The data filtering script
      */
-    public function __construct($loader = null, callable $filter = null)
+    public function __construct($loader = null, $filter = null)
     {
-        if (is_callable($loader)) {
-            $this->setLoader($loader);
-        } else {
-            $class = null;
-            if(is_object($loader)) {
-                $class = $loader;
-            } elseif(is_string($loader) && class_exists($loader)) {
-                $class = new $loader;
-            }
-
-            if(!empty($class)) {
-                if (method_exists($class, 'loader')) {
-                    $this->setLoader(array($class, 'loader'));
-                }
-                if (method_exists($class, 'filter')) {
-                    $this->setFilter(array($class, 'filter'));
-                }
-            }
+        if (!$this->setLoader($loader) && method_exists($this, 'loader')) {
+            $this->setLoader(array($this, 'loader'));
+        } elseif (
+            empty($filter)
+            && is_object($loader)
+            && method_exists($loader, 'filter')
+        ) {
+            $this->setFilter(array($loader, 'filter'));
         }
 
-        if (is_callable($filter)) {
-            $this->setFilter($filter);
+        if (
+            null === $this->_filter
+            && !$this->setFilter($filter)
+            && method_exists($this, 'filter')
+        ) {
+            $this->setFilter(array($this, 'filter'));
         }
     }
 
@@ -90,32 +83,24 @@ class Thing implements \IteratorAggregate, \ArrayAccess, \Serializable
         $this->_raw = $this->_data = array();
 
         if (null !== $this->_loader) {
-            $function = $this->_loader;
-            $res = null;
-            if(is_callable($function)) {
-                $res = $function();
-            }
+            $res = $this->applyCallable($this->_loader);
             if (is_array($res)) {
                 $this->_raw = $this->_data = $res;
             }
         }
 
         if (null !== $this->_filter) {
-            $function = $this->_filter;
-            $res = null;
-            if(is_callable($function)) {
-                $res = $function($this->_raw);
-            }
+            $res = $this->applyCallable($this->_filter, $this->_raw);
             if (is_array($res)) {
                 $this->_data = array_replace_recursive($this->_raw, $res);
             }
         }
 
         if (!empty($this->_filters)) {
-            foreach($this->_filters as $key => $filter) {
+            foreach ($this->_filters as $key => $filter) {
                 if (array_key_exists($key, $this->_data)) {
                     $value = $this->_data[$key];
-                    if(is_callable($filter)) {
+                    if (is_callable($filter)) {
                         $this->_data[$key] = $filter($value, $key);
                     }
                 }
@@ -124,42 +109,85 @@ class Thing implements \IteratorAggregate, \ArrayAccess, \Serializable
     }
 
     /**
+     * Apply callable function
+     *
+     * @param  mixed $function The data loading script
+     * @return mixed Result data
+     */
+    private function applyCallable($function, $args = null)
+    {
+        $res = null;
+        if (is_callable($function)) {
+            $res = $function($args);
+        }
+        return $res;
+    }
+
+    /**
      * Set data loader
      *
-     * @param  callable  $function  The data loading script
-     * @return object Current object
+     * @param  mixed $function The data loading script
+     * @return bool  Success or failed
      */
-    public function setLoader(callable $function)
+    public function setLoader($function)
     {
-        if ($function instanceof \Closure) {
-            $function = $function->bindTo($this);
-        }
+        if (is_callable($function)) {
+            if ($function instanceof \Closure) {
+                $function = $function->bindTo($this);
+            }
+            $this->_loader = $function;
+            return true;
+        } else {
+            $class = null;
+            if (is_object($function)) {
+                $class = $function;
+            } elseif (is_string($function) && class_exists($function)) {
+                $class = new $function();
+            }
 
-        $this->_loader = $function;
-        return $this;
+            if (!empty($class) && method_exists($class, 'loader')) {
+                $this->_loader = array($class, 'loader');
+                return true;
+            }
+        }
+        return false;
     }
 
     /**
      * Set data filter
      *
-     * @param  callable  $function  The data filtering script
-     * @return object Current object
+     * @param  mixed $function The data filtering script
+     * @return bool  Success or failed
      */
-    public function setFilter(callable $function)
+    public function setFilter($function)
     {
-        if ($function instanceof \Closure) {
-            $function = $function->bindTo($this);
-        }
+        if (is_callable($function)) {
+            if ($function instanceof \Closure) {
+                $function = $function->bindTo($this);
+            }
+            $this->_filter = $function;
+            return true;
+        } else {
+            $class = null;
+            if (is_object($function)) {
+                $class = $function;
+            } elseif (is_string($function) && class_exists($function)) {
+                $class = new $function();
+            }
 
-        $this->_filter = $function;
-        return $this;
+            if (!empty($class) && method_exists($class, 'filter')) {
+                $this->_filter = array($class, 'filter');
+                return true;
+            }
+        }
+        return false;
     }
 
     /**
      * Add item filter
      *
-     * @param  mixed  $name  The item key name
-     * @param  mixed  $function  The item filtering script
+     * @param  mixed  $name     The item key name
+     * @param  mixed  $function The item filtering script
      * @return object Current object
      */
     public function addFilter($name, $function)
