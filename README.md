@@ -1,4 +1,4 @@
-# PiTTYPHP/Thing
+# BittyPHP/Thing
 
 [![Build Status](https://travis-ci.org/bittyphp/thing.svg?branch=master)](https://travis-ci.org/bittyphp/thing)
 [![Software License](https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square)](https://github.com/bittyphp/thing/blob/master/LICENSE)
