@@ -1,7 +1,7 @@
 <?php
 namespace BittyPHP\Thing\Test;
 
-use BittyPHP\Thing\Thing;
+use BittyPHP\Thing;
 
 class ThingTest extends \PHPUnit_Framework_TestCase
 {

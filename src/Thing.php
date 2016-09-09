@@ -5,7 +5,7 @@
  * Licensed under The MIT License
  * @license http://www.opensource.org/licenses/mit-license.php MIT License
  */
-namespace BittyPHP\Thing;
+namespace BittyPHP;
 
 class Thing implements \IteratorAggregate, \ArrayAccess, \Serializable
 {
