@@ -375,7 +375,7 @@ class Thing implements \IteratorAggregate, \ArrayAccess, \Serializable
      */
     public function __unset($name)
     {
-        return $this->remove($name);
+        $this->remove($name);
     }
 
     /**
