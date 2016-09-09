@@ -378,6 +378,16 @@ class Thing implements \IteratorAggregate, \ArrayAccess, \Serializable
         return $this->remove($name);
     }
 
+    /**
+     * Get dump data
+     *
+     * @return array dump data
+     */
+    public function __debugInfo()
+    {
+        return $this->_data;
+    }
+
 
     /***************************************************************************
      * ArrayAccess interface
