@@ -378,24 +378,6 @@ class Thing implements \IteratorAggregate, \ArrayAccess, \Serializable
         return $this->remove($name);
     }
 
-    /**
-     * Collection cloning
-     *
-     * @param object Cloned Collection object
-     */
-    public function __clone()
-    {
-        if (!empty($this->_data)) {
-            foreach ($this->_data as $key => $value) {
-                if (is_object($value)) {
-                    $this->_data[$key] = clone $value;
-                } else {
-                    $this->_data[$key] = $value;
-                }
-            }
-        }
-    }
-
 
     /***************************************************************************
      * ArrayAccess interface
