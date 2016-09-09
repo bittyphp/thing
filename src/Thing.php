@@ -379,7 +379,7 @@ class Thing implements \IteratorAggregate, \ArrayAccess, \Serializable
     }
 
     /**
-     * Get dump data
+     * Get dump data (for PHP >= 5.6)
      *
      * @return array dump data
      */
