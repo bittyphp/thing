@@ -83,14 +83,20 @@ class Thing implements \IteratorAggregate, \ArrayAccess, \Serializable
         $this->_raw = $this->_data = array();
 
         if (null !== $this->_loader) {
-            $res = $this->applyCallable($this->_loader);
+            $res = null;
+            if (is_callable($this->_loader)) {
+                $res = call_user_func($this->_loader);
+            }
             if (is_array($res)) {
                 $this->_raw = $this->_data = $res;
             }
         }
 
         if (null !== $this->_filter) {
-            $res = $this->applyCallable($this->_filter, $this->_raw);
+            $res = null;
+            if (is_callable($this->_filter)) {
+                $res = call_user_func_array($this->_filter, array($this->_raw));
+            }
             if (is_array($res)) {
                 $this->_data = array_replace_recursive($this->_raw, $res);
             }
@@ -108,21 +114,6 @@ class Thing implements \IteratorAggregate, \ArrayAccess, \Serializable
                 }
             }
         }
-    }
-
-    /**
-     * Apply callable function
-     *
-     * @param  mixed $function The data loading script
-     * @return mixed Result data
-     */
-    private function applyCallable($function, $args = null)
-    {
-        $res = null;
-        if (is_callable($function)) {
-            $res = call_user_func_array($function, array($args));
-        }
-        return $res;
     }
 
     /**
