@@ -385,6 +385,7 @@ class Thing implements \IteratorAggregate, \ArrayAccess, \Serializable
      */
     public function __debugInfo()
     {
+        $this->_initialize();
         return $this->_data;
     }
 
