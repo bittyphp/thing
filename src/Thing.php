@@ -74,7 +74,7 @@ class Thing implements \IteratorAggregate, \ArrayAccess, \Serializable
     /**
      * Initial loading source data
      */
-    private function loadSourceData()
+    final protected function _initialize()
     {
         if (null !== $this->_raw) {
             return;
@@ -207,7 +207,7 @@ class Thing implements \IteratorAggregate, \ArrayAccess, \Serializable
      */
     public function raw()
     {
-        $this->loadSourceData();
+        $this->_initialize();
         return $this->_raw;
     }
 
@@ -220,7 +220,7 @@ class Thing implements \IteratorAggregate, \ArrayAccess, \Serializable
      */
     public function set($name, $value)
     {
-        $this->loadSourceData();
+        $this->_initialize();
         $this->_data[$name] = $value;
         return $this;
     }
@@ -234,7 +234,7 @@ class Thing implements \IteratorAggregate, \ArrayAccess, \Serializable
      */
     public function get($name, $default = null)
     {
-        $this->loadSourceData();
+        $this->_initialize();
         return array_key_exists($name, $this->_data) ? $this->_data[$name] : $default;
     }
 
@@ -246,7 +246,7 @@ class Thing implements \IteratorAggregate, \ArrayAccess, \Serializable
      */
     public function has($name)
     {
-        $this->loadSourceData();
+        $this->_initialize();
         return array_key_exists($name, $this->_data);
     }
 
@@ -257,7 +257,7 @@ class Thing implements \IteratorAggregate, \ArrayAccess, \Serializable
      */
     public function remove($name)
     {
-        $this->loadSourceData();
+        $this->_initialize();
         unset($this->_data[$name]);
     }
 
@@ -276,7 +276,7 @@ class Thing implements \IteratorAggregate, \ArrayAccess, \Serializable
      */
     public function all()
     {
-        $this->loadSourceData();
+        $this->_initialize();
         return $this->_data;
     }
 
@@ -287,7 +287,7 @@ class Thing implements \IteratorAggregate, \ArrayAccess, \Serializable
      */
     public function keys()
     {
-        $this->loadSourceData();
+        $this->_initialize();
         return array_keys($this->_data);
     }
 
@@ -298,7 +298,7 @@ class Thing implements \IteratorAggregate, \ArrayAccess, \Serializable
      */
     public function values()
     {
-        $this->loadSourceData();
+        $this->_initialize();
         return array_values($this->_data);
     }
 
@@ -310,7 +310,7 @@ class Thing implements \IteratorAggregate, \ArrayAccess, \Serializable
      */
     public function contains($value, $strict = true)
     {
-        $this->loadSourceData();
+        $this->_initialize();
         return in_array($value, $this->_data, $strict);
     }
 
@@ -321,7 +321,7 @@ class Thing implements \IteratorAggregate, \ArrayAccess, \Serializable
      */
      public function isEmpty($name)
      {
-         $this->loadSourceData();
+         $this->_initialize();
          if (array_key_exists($name, $this->_data)) {
              $value = $this->_data[$name];
              return ('' === $value || null === $value || false === $value);
@@ -456,7 +456,7 @@ class Thing implements \IteratorAggregate, \ArrayAccess, \Serializable
      */
     public function getIterator()
     {
-        $this->loadSourceData();
+        $this->_initialize();
         return new \ArrayIterator($this->_data);
     }
 
@@ -472,7 +472,7 @@ class Thing implements \IteratorAggregate, \ArrayAccess, \Serializable
      */
     public function serialize()
     {
-        $this->loadSourceData();
+        $this->_initialize();
         return serialize($this->_data);
     }
 
@@ -483,7 +483,7 @@ class Thing implements \IteratorAggregate, \ArrayAccess, \Serializable
      */
     public function unserialize($data)
     {
-        $this->loadSourceData();
+        $this->_initialize();
         return $this->set(unserialize($data));
     }
 }
