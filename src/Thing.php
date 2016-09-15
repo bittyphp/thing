@@ -58,8 +58,12 @@ class Thing extends \ArrayObject
      * @param  $name Array key name
      * @param callable $hook Value replace script
      */
-    public function hook($name, callable $hook)
+    public function hook($name, $hook)
     {
+        if (!is_callable($hook)) {
+            throw new \InvalidArgumentException('Argument 2 must be callable.');
+        }
+
         if ($this->offsetExists($name)) {
             $this->offsetUnset($name);
         }
