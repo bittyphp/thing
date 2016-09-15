@@ -135,7 +135,11 @@ class Thing extends \ArrayObject
      */
     public function toJSON($options = 0, $depth = 512)
     {
-        return json_encode(parent::getArrayCopy(), $options, $depth);
+        if (PHP_VERSION_ID <= 50300) {
+            return json_encode(parent::getArrayCopy(), $options);
+        } else {
+            return json_encode(parent::getArrayCopy(), $options, $depth);
+        }
     }
 
     /**
