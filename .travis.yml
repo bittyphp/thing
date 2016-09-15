@@ -9,16 +9,15 @@ php:
   - 7.1
   - hhvm
 
-sudo: false
 
 before_script:
   - travis_retry composer self-update
   - travis_retry composer install --no-interaction --prefer-dist
+  - travis_retry composer require
 
 script:
   - mkdir -p build/logs
-  - ./vendor/bin/parallel-lint src tests
-  - ./vendor/bin/phpunit --coverage-clover build/logs/clover.xml
+  - phpunit --coverage-clover build/logs/clover.xml
 
-after_script:
-  - php vendor/bin/coveralls
+after_success:
+  - travis_retry php vendor/bin/coveralls -v -c .coveralls.yml
