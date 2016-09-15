@@ -69,7 +69,12 @@ class Thing extends \ArrayObject
         }
 
         $this->offsetSet($name, null);
-        $this->hooks[$name] = $hook->bindTo($this);
+
+        if (PHP_VERSION_ID < 50400) {// NOTE: Closure::bindTo is PHP >= 5.4
+            $this->hooks[$name] = $hook;
+        } else {
+            $this->hooks[$name] = $hook->bindTo($this);
+        }
     }
 
     /**
@@ -135,7 +140,7 @@ class Thing extends \ArrayObject
      */
     public function toJSON($options = 0, $depth = 512)
     {
-        if (PHP_VERSION_ID <= 50300) {
+        if (PHP_VERSION_ID < 50500) {// NOTE: Third parameter is PHP >= 5.4
             return json_encode(parent::getArrayCopy(), $options);
         } else {
             return json_encode(parent::getArrayCopy(), $options, $depth);
