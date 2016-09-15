@@ -20,4 +20,4 @@ script:
   - phpunit --coverage-clover build/logs/clover.xml
 
 after_success:
-  - travis_retry php vendor/bin/coveralls -v -c .coveralls.yml
+  - travis_retry php vendor/bin/coveralls -v
