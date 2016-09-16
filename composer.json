@@ -1,6 +1,6 @@
 {
   "name": "bittyphp/thing",
-  "description": "Make something data object simply.",
+  "description": "A data object of something.",
   "type": "library",
   "keywords": ["array", "object"],
   "license": "MIT",
