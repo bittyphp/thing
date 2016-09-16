@@ -63,18 +63,18 @@ class ThingTest extends \PHPUnit_Framework_TestCase
     public function testArrayKeys()
     {
         $thing = new Thing($this->sample);
-        $this->assertSame($thing->keys(), array_keys($this->sample));
+        $this->assertSame((array) $thing->keys(), array_keys($this->sample));
     }
 
     public function testArrayValues()
     {
         $thing = new Thing($this->sample);
-        $this->assertSame($thing->values(), array_values($this->sample));
+        $this->assertSame((array) $thing->values(), array_values($this->sample));
     }
 
     public function testArraySlice()
     {
         $thing = new Thing($this->sample);
-        $this->assertSame($thing->slice(2, 1), array_slice($this->sample, 2, 1));
+        $this->assertSame((array) $thing->slice(2, 1), array_slice($this->sample, 2, 1));
     }
 }
